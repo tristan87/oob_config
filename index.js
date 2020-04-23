@@ -17,6 +17,8 @@ const oobSetType =      require('./app/oobtype');
 const parseResponse =   require('./app/responsebool');
 //import the module for selecting the correct password to push
 const password =        require('./app/password');
+//import the module for removing passwords from ssh output before writing logs
+const sanitize =        require('./app/sanitize');
 
 //import the graceful-fs module for creating log files
 const fs =              require('graceful-fs');
@@ -87,7 +89,7 @@ let pushConfig = async (config) => {
       let modifier = configObject.commandModifier;
       let successMessages = sessionText.match(successRegex).length;
       let totalCommands = sessionText.match(commandRegex).length + modifier;
-      fs.appendFile(config.logPath, sessionText, (error) => {
+      fs.appendFile(config.logPath, sanitize(configObject, sessionText), (error) => {
         if (error) {console.log(`Log Error: ${error}`);}
       });
       console.log(`${successMessages} of ${totalCommands} configuration items set successfully!\nSee ${config.logPath} for details.\n`);

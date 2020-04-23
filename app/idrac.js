@@ -14,6 +14,7 @@ module.exports = (config) => {
     ],
     successRegex: /Object value modified successfully/g,
     commandRegex: /\/admin1->racadm/g,
+    passwordRegex: /(?<=\d.Password\s)\S+$/g,
     commandModifier: 1
   };
 };

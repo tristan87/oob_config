@@ -14,6 +14,7 @@ module.exports = (config) => {
     ],
     successRegex: /status_tag=COMMAND COMPLETED/g,
     commandRegex: /<\/>hpiLO-> set /g,
+    passwordRegex: /(?<=\spassword=)\S+$/g,
     commandModifier: 1
   };
 };
