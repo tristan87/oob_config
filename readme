@@ -1,4 +1,4 @@
-This script is intended for use with iDRAC 8 and iLO 5 and has not been tested
+This script is intended for use with iDRAC 9 and iLO 5 and has not been tested
 with previous iDRAC or iLO versions. Parameters can be set in config.js.
 Use NPM to install Node module dependencies:
 
@@ -30,4 +30,3 @@ Features to be Implemented in Future Versions
 ********************************************************************************
 - Make the script wait for ping before prompting to push the configuration.
 - Handle connection errors.
-- Sanitize log files to remove passwords
