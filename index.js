@@ -89,7 +89,7 @@ let pushConfig = async (config) => {
       let modifier = configObject.commandModifier;
       let successMessages = sessionText.match(successRegex).length;
       let totalCommands = sessionText.match(commandRegex).length + modifier;
-      fs.appendFile(config.logPath, sanitize(configObject, sessionText), (error) => {
+      fs.appendFile(config.logPath, sessionText, (error) => {
         if (error) {console.log(`Log Error: ${error}`);}
       });
       console.log(`${successMessages} of ${totalCommands} configuration items set successfully!\nSee ${config.logPath} for details.\n`);
