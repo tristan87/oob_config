@@ -13,8 +13,7 @@ module.exports = (config) => {
       `create /map1/accounts1/ username=${config.setUsername} password=${config.setPassword}`,
     ],
     successRegex: /status_tag=COMMAND COMPLETED/g,
-    commandRegex: /<\/>hpiLO-> set /g,
-    passwordRegex: /(?<=\spassword=)\S+$/g,
+    commandRegex: />hpiLO-> set /g,
     commandModifier: 1
   };
 };
