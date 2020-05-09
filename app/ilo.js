@@ -10,7 +10,7 @@ module.exports = (config) => {
       `set /map1/gateway1 AccessInfo=${config.gateway}`,
       `set /map1/settings1/DNSSettings1 DNSServerAddress=0.0.0.0 RegisterThisConnection=no oemHPE_UseDHCPv4DomainName=no`,
       `set /map1/settings1/WINSSettingData1 WINSServerAddress=0.0.0.0, 0.0.0.0 RegisterThisConnection=no DHCPOptionToUse=no`,
-      `create /map1/accounts1/ username=${config.setUsername} password=${config.setPassword}`,
+      `create /map1/accounts1/ username=${config.setUsername} password=${config.setPassword} group=admin,config,oemHPE_power,oemHPEvm`,
     ],
     successRegex: /status_tag=COMMAND COMPLETED/g,
     commandRegex: />hpiLO-> set /g,

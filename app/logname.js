@@ -15,5 +15,6 @@ module.exports = (ext) => {
   let hour =    zeroPad(date.getHours());
   let minute =  zeroPad(date.getMinutes());
   let second =  zeroPad(date.getSeconds());
+
   return `${year}-${month}-${day}_${hour}-${minute}-${second}.${ext}`;
 };

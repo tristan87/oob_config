@@ -17,8 +17,6 @@ const oobSetType =      require('./app/oobtype');
 const parseResponse =   require('./app/responsebool');
 //import the module for selecting the correct password to push
 const password =        require('./app/password');
-//import the module for removing passwords from ssh output before writing logs
-const sanitize =        require('./app/sanitize');
 
 //import the graceful-fs module for creating log files
 const fs =              require('graceful-fs');
