@@ -3,29 +3,31 @@
 /*jshint esversion: 8 */
 
 //import the configuration object from the config.js file
-let config =            require('./config');
+let config =              require('./config');
 
 //import the hostname formatting module
-const formatHostname =  require('./app/hostname');
+const formatHostname =    require('./app/hostname');
 //import the logname module for creating log names based on the current datetime
-const getLogName =      require('./app/logname');
+const getLogName =        require('./app/logname');
 //import the hostname and IP incrementing module
-const increment =       require('./app/increment');
+const increment =         require('./app/increment');
 //import the out-of-band type module
-const oobSetType =      require('./app/oobtype');
+const oobSetType =        require('./app/oobtype');
 //import the module for parsing negative and positive user responses
-const parseResponse =   require('./app/responsebool');
+const parseResponse =     require('./app/responsebool');
+//import the module for parsing ssh session text
+const parseSessionText =  require('./app/parse_session_text');
 //import the module for selecting the correct password to push
-const password =        require('./app/password');
+const password =          require('./app/password');
 
 //import the graceful-fs module for creating log files
-const fs =              require('graceful-fs');
+const fs =                require('graceful-fs');
 //import the ip module for IP address utilities
-const ip =              require('ip');
+const ip =                require('ip');
 //import the prompts module to enable user input
-const prompts =         require('prompts');
+const prompts =           require('prompts');
 //import the ssh2shell module for ssh functionality
-const ssh2shell =       require('ssh2shell');
+const ssh2shell =         require('ssh2shell');
 
 console.log(config.greeting);
 
@@ -71,8 +73,8 @@ let pushConfig = async (config) => {
 
   let host = {
     server: {
-      host:     config[oobType]['defaultIP'],
-      userName: config[oobType]['defaultUsername'],
+      host:     config[oobType].defaultIP,
+      userName: config[oobType].defaultUsername,
       password: password(config),
       port:     config.sshPort
     },
@@ -82,15 +84,11 @@ let pushConfig = async (config) => {
   try {
     SSH = new ssh2shell(host),
     callback = (sessionText) => {
-      let successRegex = configObject.successRegex;
-      let commandRegex = configObject.commandRegex;
-      let modifier = configObject.commandModifier;
-      let successMessages = sessionText.match(successRegex).length;
-      let totalCommands = sessionText.match(commandRegex).length + modifier;
+
       fs.appendFile(config.logPath, sessionText, (error) => {
         if (error) {console.log(`Log Error: ${error}`);}
       });
-      console.log(`${successMessages} of ${totalCommands} configuration items set successfully!\nSee ${config.logPath} for details.\n`);
+      console.log(parseSessionText(config, configObject, sessionText));
       startNextLoop();
     },
     SSH.connect(callback);
@@ -192,7 +190,7 @@ let initialUserPrompt = async () => {
       //set config object settings per user input
       config.oobType =                  oobSetType(response.oobType);
       config.currentHostname =          removeSuffix(response.hostname);
-      config.formattedHostname =        formatHostname(response.hostname, config)
+      config.formattedHostname =        formatHostname(response.hostname, config);
       config.currentIP =                response.ipAddress;
       config.netmask =                  parseCIDR(response.netmask);
       config.gateway =                  response.gateway;
