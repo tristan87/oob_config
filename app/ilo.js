@@ -13,7 +13,7 @@ module.exports = (config) => {
       `create /map1/accounts1/ username=${config.setUsername} password=${config.setPassword} group=admin,config,oemHPE_power,oemHPEvm`,
     ],
     successRegex: /status_tag=COMMAND COMPLETED/g,
-    commandRegex: />hpiLO-> set /g,
+    commandRegex: />hpiLO->set /g,
     commandModifier: 1
   };
 };
