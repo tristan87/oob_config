@@ -17,7 +17,7 @@ module.exports = {
 
     iDRAC: {
       modulePath: './app/idrac',
-      defaultIP: '169.254.0.3',
+      defaultIP: '192.168.0.120',
       defaultUsername: 'root',
       defaultPassword: 'calvin'
     },

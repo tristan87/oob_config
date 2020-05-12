@@ -1,5 +1,4 @@
 // 2020 Tristan Davis | JPMC
-// bug reports and feature requests: tristan.f.davis@jpmchase.com
 /*jshint esversion: 8 */
 
 //import the configuration object from the config.js file
