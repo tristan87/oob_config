@@ -30,3 +30,5 @@ Features to be Implemented in Future Versions
 ********************************************************************************
 - Make the script wait for ping before prompting to push the configuration.
 - Handle connection errors.
+- Allow default set credentials to be saved to the config_override.js file.
+- Allow the user to try again if there are any errors.

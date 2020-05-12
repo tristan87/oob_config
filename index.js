@@ -1,8 +1,12 @@
 // 2020 Tristan Davis | JPMC
 /*jshint esversion: 8 */
 
-//import the configuration object from the config.js file
-let config =              require('./config');
+//import the graceful-fs module for file operations
+const fs =                require('graceful-fs');
+
+//import the configuration object from the config_override.js file, if it exists
+//and from config.js otherwise
+let config = require((fs.existsSync('./config_override.js')) ? './config_override' : './config');
 
 //import the hostname formatting module
 const formatHostname =    require('./app/hostname');
@@ -19,8 +23,6 @@ const parseSessionText =  require('./app/parse_session_text');
 //import the module for selecting the correct password to push
 const password =          require('./app/password');
 
-//import the graceful-fs module for creating log files
-const fs =                require('graceful-fs');
 //import the ip module for IP address utilities
 const ip =                require('ip');
 //import the prompts module to enable user input
