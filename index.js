@@ -1,21 +1,18 @@
 // 2020 Tristan Davis | JPMC
 /*jshint esversion: 8 */
 
-//import the graceful-fs module for file operations
-const fs =                require('graceful-fs');
-
-//import the configuration object from the config_override.js file, if it exists
-//and from config.js otherwise
-let config = require((fs.existsSync('./config_override.js')) ? './config_override' : './config');
-
 //import the hostname formatting module
 const formatHostname =    require('./app/hostname');
+//import the graceful-fs module for file operations
+const fs =                require('graceful-fs');
 //import the logname module for creating log names based on the current datetime
 const getLogName =        require('./app/logname');
 //import the hostname and IP incrementing module
 const increment =         require('./app/increment');
 //import the out-of-band type module
 const oobSetType =        require('./app/oobtype');
+//import the override module to provide config override functionality
+const override =          require('./app/override');
 //import the module for parsing negative and positive user responses
 const parseResponse =     require('./app/responsebool');
 //import the module for parsing ssh session text
@@ -29,6 +26,10 @@ const ip =                require('ip');
 const prompts =           require('prompts');
 //import the ssh2shell module for ssh functionality
 const ssh2shell =         require('ssh2shell');
+
+//import the configuration object from the config_override.js file, if it exists
+//and from config.js otherwise
+let config = require(override.configPath);
 
 console.log(config.greeting);
 
@@ -144,12 +145,12 @@ const initialPrompt = [
     validate: value => ip.isV4Format(value) ? true : 'Please enter a valid IP address.'
   },
   {
-    type:     'text',
+    type:     (override.credsExist) ? false : 'text',
     name:     'setUsername',
     message:  'Please enter the admin username to set for this series of hosts:',
   },
   {
-    type:     'text',
+    type:     (override.credsExist) ? false : 'text',
     name:     'setPassword',
     message:  'Please enter the admin password to set for this series of hosts:',
     style:    'password'
@@ -159,7 +160,7 @@ const initialPrompt = [
 //user prompt for password confirmation
 let passwordConfirmPrompt = [
   {
-    type:     'text',
+    type:     (override.credsExist) ? false : 'text',
     name:     'confirmPassword',
     message:  'Please enter the admin password again:',
     style:    'password',
@@ -195,8 +196,8 @@ let initialUserPrompt = async () => {
       config.currentIP =                response.ipAddress;
       config.netmask =                  parseCIDR(response.netmask);
       config.gateway =                  response.gateway;
-      config.setUsername =              response.setUsername;
-      config.setPassword =              response.setPassword;
+      config.setUsername =              override.setUsername(response.setUsername);
+      config.setPassword =              override.setPassword(response.setPassword);
   }
   catch(error) {
     console.log(error);
