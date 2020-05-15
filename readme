@@ -14,8 +14,8 @@ Individual commands can be commented out with two forward slashes at the
 beginning of the line, which will prevent them from being applied.
 When configuring newer Dell systems, a micro USB cable can be used to connect
 to the iDRAC maintenance port. A virtual interface will be automatically created
-and assigned the IP address 169.254.0.3. The management interface can be reached
-at 169.254.0.4. This address is independent of the iDRAC NIC and will remain
+and assigned the IP address 169.254.0.4. The management interface can be reached
+at 169.254.0.3. This address is independent of the iDRAC NIC and will remain
 reachable after the iDRAC IP settings have been configured.
 Newer HP systems have an iLO USB-A port which can be used in combination with
 a USB NIC for configuration. A static IP (e.g. 169.254.1.3) must be configured
