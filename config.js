@@ -1,3 +1,4 @@
+//see the readme for help modifying this configuration
 module.exports = {
   greeting: 'Welcome to the out-of-band configuration script.\nPress "CTRL+C" at any time to exit.\n',
   sshPort: 22,
@@ -6,8 +7,7 @@ module.exports = {
   currentHostname: '',
   formattedHostname: '',
   currentIP: '',
-//do not set credentials here, they will be ignored. if default credentails are
-//required, create a config_override.js file. see the readme for more details
+//do not set credentials here in config.js. see the readme for more details.
   setUsername: '',
   setPassword: '',
   netmask: '255.255.255.0',
