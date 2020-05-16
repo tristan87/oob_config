@@ -5,7 +5,7 @@ let isPositive = (response = '') => {
   return positiveResponses.indexOf(lowerCaseResponse) !== -1;
 };
 
-//check user input for a negative response and return false if present
+//check user input for a negative or empty response and return true if present
 let isNegative = (response = '') => {
   let lowerCaseResponse = response.toLowerCase();
   let negativeResponses = ['n', 'no', '0', ''];

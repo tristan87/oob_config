@@ -8,20 +8,32 @@ Use Node.js to run the script:
 
   node index.js
 
+Configuration
+-------------
 The iDRAC and iLO configuration commands are stored in arrays in app/idrac.js
 and app/ilo.js.
 Individual commands can be commented out with two forward slashes at the
 beginning of the line, which will prevent them from being applied.
+If you would like to set default credentials or change other config settings for
+development or testing, create a copy of config.js named 'config_override.js'
+and edit its contents. Default credentials in config.js will be ignored for
+security purposes, as this file is tracked by Git.
+
+Dell iDRAC
+----------
 When configuring newer Dell systems, a micro USB cable can be used to connect
 to the iDRAC maintenance port. A virtual interface will be automatically created
 and assigned the IP address 169.254.0.4. The management interface can be reached
 at 169.254.0.3. This address is independent of the iDRAC NIC and will remain
 reachable after the iDRAC IP settings have been configured.
-Newer HP systems have an iLO USB-A port which can be used in combination with
-a USB NIC for configuration. A static IP (e.g. 169.254.1.3) must be configured
-in order to reach the iLO USB interface at 169.254.1.2. As with the iDRAC, the
-default iLO address will remain reachable through the USB interface after iLO IP
-settings have been applied.
+
+HPE iLOs
+--------
+Newer HPE systems have a dedicated iLO USB-A port which can be used in
+combination with a USB NIC for configuration. A static IP (e.g. 169.254.1.3)
+must be configured in order to reach the iLO USB interface at 169.254.1.2. As
+with the iDRAC, the default iLO address will remain reachable through the USB
+interface after iLO IP settings have been applied.
 A barcode scanner is helpful when configuring iLOs as each has a unique
 password printed on the pull-out tab at the front of the server. The script will
 prompt for this password during iLO configuration.
