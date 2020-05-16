@@ -1,6 +1,4 @@
-/*jshint esversion: 8 */
-
-//parse an ssh session's text for success and failure messages and display the
+//parse an ssh session's text for success and failure messages and return the
 //result to the user
 module.exports = (config, configObject, sessionText) => {
   let successRegex = configObject.successRegex;

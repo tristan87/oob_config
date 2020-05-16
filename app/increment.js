@@ -1,5 +1,3 @@
-/*jshint esversion: 8 */
-
 //import the hostname and IP parsing module
 const parse = require('./parse');
 

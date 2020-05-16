@@ -1,5 +1,3 @@
-/*jshint esversion: 8 */
-
 module.exports = (config) => {
   return {
     commands: [

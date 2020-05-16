@@ -10,10 +10,12 @@ module.exports = {
   currentIP: '',
   setUsername: '',
   setPassword: '',
-  netmask: '',
+  netmask: '255.255.255.0',
   gateway: '',
   oobType: '',
   logPath: '',
+  logExt: 'log',
+  continue: true,
 
     iDRAC: {
       modulePath: './app/idrac',

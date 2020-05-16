@@ -1,7 +1,10 @@
-/*jshint esversion: 8 */
+//return the current date and time as a string in yyyy mm dd hh mm ss format
+module.exports = (ext = 'txt', separators = '-_-') => {
+  //parse the separator parameter string
+  let y =  separators.slice(0,1);
+  let d =  separators.slice(1,2);
+  let h =  separators.slice(2,3);
 
-//create a filename based on the current date and time
-module.exports = (ext) => {
   let zeroPad = (timeObj) => {
     let timeStr = timeObj.toString();
     return timeStr.padStart(2, '0');
@@ -16,5 +19,5 @@ module.exports = (ext) => {
   let minute =  zeroPad(date.getMinutes());
   let second =  zeroPad(date.getSeconds());
 
-  return `${year}-${month}-${day}_${hour}-${minute}-${second}.${ext}`;
+  return `${year}${y}${month}${y}${day}${d}${hour}${h}${minute}${h}${second}`;
 };

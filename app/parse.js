@@ -1,5 +1,3 @@
-/*jshint esversion: 8 */
-
 //parse a hostname/IP and return an object of its constituents and properties
 module.exports = (string) => {
   let regex = /\d+$/;

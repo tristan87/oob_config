@@ -1,25 +1,23 @@
-/*jshint esversion: 8 */
-
 //import the graceful-fs module for file operations
 const fs = require('graceful-fs');
 
-//set the config path to config_override.js, if it exists, and from config.js
-//otherwise
-let overrideFileExists = fs.existsSync('./config_override.js')
+//return a bool based on whether the override file exists
+let overrideFileExists = fs.existsSync('./config_override.js');
+//set the config path
 let configPath = (overrideFileExists) ? './config_override' : './config';
 
 //import the config object
 let config = require(`.${configPath}`);
 
-//if the override file and set credentials exist, return true
+//if the override file exists and contains credentials, return true
 let overrideCredsExist = (
   overrideFileExists &&
   config.setUsername !== '' &&
   config.setPassword !== ''
 );
 
-//if the default credentials exist, return them, otherwise return the override
-//credentials
+//if default credentials exist in config_override, return them, otherwise return
+//the credentials typed by the user.
 let setUsername = (typedUsername = '') => {
   return (typedUsername === '') ? config.setUsername : typedUsername;
 };
@@ -33,4 +31,4 @@ module.exports = {
   credsExist: overrideCredsExist,
   setUsername: setUsername,
   setPassword: setPassword
-}
+};
