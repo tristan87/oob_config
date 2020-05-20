@@ -28,7 +28,7 @@ module.exports = (config, configObject, sessionText) => {
     let partialSuccessObj = { success: false, message: successMsg};
 //return the appropriate object based on the success or failure status
     if (totalSuccess)   return totalSuccessObj;
-    if (partialSuccess) return partialSuccessOjb;
+    if (partialSuccess) return partialSuccessObj;
     if (totalFailure)   return totalFailureObj;
   }
   else {
