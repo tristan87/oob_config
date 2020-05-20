@@ -1,5 +1,6 @@
 index.html
 config_override.js
+config_override*
 app/ilo_override.js
 app/idrac_override.js
 reset.js

@@ -30,7 +30,7 @@ let config = require(override.configPath);
 console.log(config.greeting);
 
 //increment the hostname and IP then call confirmPrompt again
-let startNextLoop = () => {
+let startNextLoop = (config) => {
   config.currentHostname = increment(config.currentHostname);
   config.formattedHostname = formatHostname(config.currentHostname, config);
   config.currentIP = increment(config.currentIP);
@@ -38,7 +38,7 @@ let startNextLoop = () => {
 };
 
 //set the log file name and path
-config.logPath = `${__dirname}/logs/${getLogName('log')}`;
+config.logPath = `${__dirname}/logs/${getLogName(config)}`;
 
 let pushConfig = async (config) => {
   let oobType = config.oobType;
@@ -64,8 +64,16 @@ let pushConfig = async (config) => {
       fs.appendFile(config.logPath, sessionText, (error) => {
         if (error) {console.log(`Log Error: ${error}`);}
       });
-      console.log(parseSessionText(config, configObject, sessionText));
-      startNextLoop();
+      let sshResponseObj = parseSessionText(config, configObject, sessionText);
+      console.log(sshResponseObj.message);
+      if (sshResponseObj.success === true) {
+        startNextLoop(config);
+      }
+      else {
+        retryPrompt(config);
+      }
+
+
     },
     SSH.connect(callback);
   }
@@ -117,8 +125,37 @@ let confirmPrompt = () => {
   ];
 };
 
+//generate a user prompt to retry after a failure
+let retryPrompt = async (config) => {
+  let retryPromptArr = [
+    {
+      type: 'text',
+      name: 'retry',
+      message: `Would you like to try configuring ${config.currentHostname} again?`
+    }
+  ];
+  try {
+    const response = await prompts(retryPromptArr);
+    let retryResponse = response.retry;
+    console.log(`response.retry: ${response.retry}`)
+    if (responseIs.negative(retryResponse)) {
+      console.log("Continuing to next host. Press \"CTRL+C\" at any time to exit.");
+      startNextLoop(config);
+    }
+    if (responseIs.positive(retryResponse)) {
+      confirmUserPrompt();
+    }
+  }
+  catch(error) {
+    config.continue = false;
+    console.log(error);
+  }
+};
+
+//
+
 //prompt the user for initial settings
-let initialUserPrompt = async () => {
+let initialUserPrompt = async (config = config) => {
   try {
     const response = await prompts(initialPrompt(config));
       //set config object settings per user input
