@@ -137,7 +137,6 @@ let retryPrompt = async (config) => {
   try {
     const response = await prompts(retryPromptArr);
     let retryResponse = response.retry;
-    console.log(`response.retry: ${response.retry}`)
     if (responseIs.negative(retryResponse)) {
       console.log("Continuing to next host. Press \"CTRL+C\" at any time to exit.");
       startNextLoop(config);
@@ -155,7 +154,7 @@ let retryPrompt = async (config) => {
 //
 
 //prompt the user for initial settings
-let initialUserPrompt = async (config = config) => {
+let initialUserPrompt = async (config) => {
   try {
     const response = await prompts(initialPrompt(config));
       //set config object settings per user input

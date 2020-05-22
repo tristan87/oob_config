@@ -8,8 +8,7 @@ module.exports = (config, configObject, sessionText) => {
   let totalFailureObj =   { success: false, message: failureMsg};
 //if a success and a failure regex are matched in the session text, display a
 //success or failure message
-  if (sessionText.match(successRegex) !== null
-    && sessionText.match(commandRegex) !== null) {
+  if (sessionText.match(successRegex) !== null && sessionText.match(commandRegex) !== null) {
 //increase or decrease the count of commands based on the type of out-of-band
 //interface
     let modifier =        configObject.commandModifier;
