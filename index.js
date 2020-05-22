@@ -31,14 +31,6 @@ let config = require(override.configPath);
 //display the welcome message to the user
 console.log(config.greeting);
 
-//increment the hostname and IP then call confirmUserPrompt again
-let startNextLoop = (config) => {
-  config.currentHostname = increment(config.currentHostname);
-  config.formattedHostname = formatHostname(config.currentHostname, config);
-  config.currentIP = increment(config.currentIP);
-  confirmUserPrompt();
-};
-
 //set the log file name and path
 config.logPath = `${__dirname}/logs/${getLogName(config)}`;
 
@@ -47,14 +39,14 @@ let initialUserPrompt = async (config) => {
   try {
     const response = await prompts(initialPrompt(config));
       //set config object settings per user input
-      config.oobType =                  oobGetType(response.oobType);
-      config.currentHostname =          removeSuffix(response.hostname, config);
-      config.formattedHostname =        formatHostname(response.hostname, config);
-      config.currentIP =                response.ipAddress;
-      config.netmask =                  parseCidr(response.netmask);
-      config.gateway =                  response.gateway;
-      config.setUsername =              override.setUsername(response.setUsername);
-      config.setPassword =              override.setPassword(response.setPassword);
+      config.oobType =            oobGetType(response.oobType);
+      config.currentHostname =    removeSuffix(response.hostname, config);
+      config.formattedHostname =  formatHostname(response.hostname, config);
+      config.currentIP =          response.ipAddress;
+      config.netmask =            parseCidr(response.netmask);
+      config.gateway =            response.gateway;
+      config.setUsername =        override.setUsername(response.setUsername);
+      config.setPassword =        override.setPassword(response.setPassword);
   }
   catch(error) {
     config.continue = false;
@@ -173,22 +165,17 @@ let retryPrompt = async (config) => {
   }
 };
 
-//user prompt for password confirmation
-let passwordConfirmPrompt = [
-  {
-    type:     (override.credsExist || !config.continue) ? false : 'text',
-    name:     'confirmPassword',
-    message:  'Please enter the admin password again:',
-    style:    'password',
-    validate: value => (value === config.setPassword) ? true : "Passwords do not match.",
-    onState:  (state) => {if(state.aborted) {config.continue = false;}}
-  }
-];
+//increment the hostname and IP then call confirmUserPrompt again
+let startNextLoop = (config) => {
+  config.currentHostname = increment(config.currentHostname);
+  config.formattedHostname = formatHostname(config.currentHostname, config);
+  config.currentIP = increment(config.currentIP);
+  confirmUserPrompt();
+};
 
 //prompt the user for initial settings, then cofirm the current settings
 initialUserPrompt(config).then(
   () => { confirmPassword().then(
-    () => { confirmUserPrompt();
-    }
+    () => { confirmUserPrompt(); }
   );}
 );
