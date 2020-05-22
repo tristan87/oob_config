@@ -2,7 +2,7 @@
 
 //import app modules
 const formatHostname =        require('./app/format_hostname');
-const generateConfirmation =  require('./app/generate_confirmation');
+const generateConfirmPrompt = require('./app/generate_confirm_prompt');
 const getLogName =            require('./app/get_log_name');
 const getSetPassword =        require('./app/get_set_password');
 const increment =             require('./app/increment');
@@ -30,7 +30,7 @@ let config = require(override.configPath);
 //display the welcome message to the user
 console.log(config.greeting);
 
-//increment the hostname and IP then call confirmPrompt again
+//increment the hostname and IP then call confirmUserPrompt again
 let startNextLoop = (config) => {
   config.currentHostname = increment(config.currentHostname);
   config.formattedHostname = formatHostname(config.currentHostname, config);
@@ -94,25 +94,6 @@ let passwordConfirmPrompt = [
     onState:  (state) => {if(state.aborted) {config.continue = false;}}
   }
 ];
-
-//generate user prompt(s) to confirm the current configuration
-let confirmPrompt = () => {
-  return [
-    {
-      type:     (config.oobType === 'iLO' && config.continue) ? 'text' : false,
-      name:     'password',
-      message:  () => `Please scan the iLO password for ${config.formattedHostname}: `,
-      style:    'password',
-      onState:  (state) => {if(state.aborted) {config.continue = false;}}
-    },
-    {
-      type:     (config.continue) ? 'text' : false,
-      name:     'confirm',
-      message:  () => `Push the following config to the currently connected ${config.oobType} (Y/N)? \n${generateConfirmation(config)}\n`,
-      onState:  (state) => {if(state.aborted) {config.continue = false;}}
-    }
-  ];
-};
 
 //generate a user prompt to retry after a failure
 let retryPrompt = async (config) => {
@@ -180,7 +161,7 @@ let confirmPassword = async() => {
 let confirmUserPrompt = async () => {
   if (config.continue) {
     try {
-      const confirm = await prompts(confirmPrompt());
+      const confirm = await prompts(generateConfirmPrompt(config));
       config.currentPassword = (confirm.password) ? confirm.password : config.iDRAC.defaultPassword;
       //exit the script if the user chooses not to push the current configuration
       if (responseIs.negative(confirm.confirm)) {
