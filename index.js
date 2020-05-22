@@ -1,17 +1,18 @@
 // 2020 Tristan Davis | JPMC
 
 //import app modules
-const formatHostname =    require('./app/format_hostname');
-const getLogName =        require('./app/get_log_name');
-const getSetPassword =    require('./app/get_set_password');
-const increment =         require('./app/increment');
-const initialPrompt =     require('./app/initial_prompt');
-const oobGetType =        require('./app/get_oob_type');
-const override =          require('./app/override');
-const parseCidr =         require('./app/parse_cidr');
-const parseSessionText =  require('./app/parse_session_text');
-const removeSuffix =      require('./app/remove_suffix');
-const responseIs =        require('./app/get_response_bool');
+const formatHostname =        require('./app/format_hostname');
+const generateConfirmation =  require('./app/generate_confirmation');
+const getLogName =            require('./app/get_log_name');
+const getSetPassword =        require('./app/get_set_password');
+const increment =             require('./app/increment');
+const initialPrompt =         require('./app/initial_prompt');
+const oobGetType =            require('./app/get_oob_type');
+const override =              require('./app/override');
+const parseCidr =             require('./app/parse_cidr');
+const parseSessionText =      require('./app/parse_session_text');
+const removeSuffix =          require('./app/remove_suffix');
+const responseIs =            require('./app/get_response_bool');
 
 //import external modules
 //module for creating log files
@@ -82,18 +83,6 @@ let pushConfig = async (config) => {
   }
 };
 
-//create a confirmation string to show the user the current settings
-let generateConfirmation = () => {
-  let confirmation = `
-    Hostname:         ${config.formattedHostname}
-    IP Address:       ${config.currentIP}
-    Subnet Mask:      ${config.netmask}
-    Default Gateway:  ${config.gateway}
-    Username:         ${config.setUsername}
-  `;
-  return confirmation;
-};
-
 //user prompt for password confirmation
 let passwordConfirmPrompt = [
   {
@@ -119,7 +108,7 @@ let confirmPrompt = () => {
     {
       type:     (config.continue) ? 'text' : false,
       name:     'confirm',
-      message:  () => `Push the following config to the currently connected ${config.oobType} (Y/N)? \n${generateConfirmation()}\n`,
+      message:  () => `Push the following config to the currently connected ${config.oobType} (Y/N)? \n${generateConfirmation(config)}\n`,
       onState:  (state) => {if(state.aborted) {config.continue = false;}}
     }
   ];
