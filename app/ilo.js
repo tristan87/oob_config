@@ -6,10 +6,11 @@ module.exports = (config) => {
       `set /map1/dnsendpt1 EnabledState=yes Hostname=${config.formattedHostname}`,
       `set /map1/enetport1/lanendpt1/ipendpt1 IPv4Address=${config.currentIP} SubnetMask=${config.netmask}`,
       `set /map1/gateway1 AccessInfo=${config.gateway}`,
-      `create /map1/accounts1/ username=${config.setUsername} password=${config.setPassword} group=admin,config,oemHPE_rc,oemHPE_power,oemHPE_vm`
+	  `set /map1/settings1/WINSSettingData1 RegisterThisConnection=no`,
+      `set /map1/accounts1/Administrator username=${config.setUsername} password=${config.setPassword}`
     ],
     successRegex: /status_tag=COMMAND COMPLETED/g,
     commandRegex: />hpiLO->set /g,
-    commandModifier: 2
+    commandModifier: 1
   };
 };
