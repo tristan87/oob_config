@@ -7,12 +7,9 @@ const generatePWConfirmPrompt = require('./app/generate_pw_confirm_prompt');
 const getLogName =              require('./app/get_log_name');
 const getSetPassword =          require('./app/get_set_password');
 const increment =               require('./app/increment');
-const initialPrompt =           require('./app/initial_prompt');
-const oobGetType =              require('./app/get_oob_type');
+const initialUserPrompt =       require('./app/initial_user_prompt');
 const override =                require('./app/override');
-const parseCidr =               require('./app/parse_cidr');
 const parseSessionText =        require('./app/parse_session_text');
-const removeSuffix =            require('./app/remove_suffix');
 const responseIs =              require('./app/get_response_bool');
 
 //import external modules
@@ -28,37 +25,18 @@ const ssh2shell = require('ssh2shell');
 //import the configuration settings
 let config = require(override.configPath);
 
-//display the welcome message to the user
-console.log(config.greeting);
-
 //set the log file name and path
 config.logPath = `${__dirname}/logs/${getLogName(config)}`;
 
-//prompt the user for initial settings
-let initialUserPrompt = async (config) => {
-  try {
-    const response = await prompts(initialPrompt(config));
-      //set config object settings per user input
-      config.oobType =            oobGetType(response.oobType);
-      config.currentHostname =    removeSuffix(response.hostname, config);
-      config.formattedHostname =  formatHostname(response.hostname, config);
-      config.currentIP =          response.ipAddress;
-      config.netmask =            parseCidr(response.netmask);
-      config.gateway =            response.gateway;
-      config.setUsername =        override.setUsername(response.setUsername);
-      config.setPassword =        override.setPassword(response.setPassword);
-  }
-  catch(error) {
-    config.continue = false;
-    console.log(error);
-  }
-};
+//display the welcome message to the user
+console.log(config.greeting);
 
 //prompt the user to confirm the password they entered
 let confirmPassword = async() => {
   if (config.continue) {
     try {
-      const confirmPasswordResponse = await prompts(generatePWConfirmPrompt(config, override));
+      const confirmPrompt = generatePWConfirmPrompt(config, override);
+      const confirmPasswordResponse = await prompts(confirmPrompt);
     }
     catch(error) {
       config.continue = false;
@@ -72,7 +50,9 @@ let confirmUserPrompt = async () => {
   if (config.continue) {
     try {
       const confirm = await prompts(generateConfirmPrompt(config));
-      config.currentPassword = (confirm.password) ? confirm.password : config.iDRAC.defaultPassword;
+      let oobType = config.oobType;
+      let defaultPassword = config[oobType].defaultPassword;
+      config.currentPassword = (confirm.password) ? confirm.password : defaultPassword;
       //exit the script if the user chooses not to push the current configuration
       if (responseIs.negative(confirm.confirm)) {
         config.continue = false;
@@ -97,6 +77,7 @@ let confirmUserPrompt = async () => {
   }
 };
 
+//send the configuration setting commands via an ssh session
 let pushConfig = async (config) => {
   let oobType = config.oobType;
   // load the appropriate oob module for the oob type selected
@@ -117,7 +98,6 @@ let pushConfig = async (config) => {
   try {
     SSH = new ssh2shell(host),
     callback = (sessionText) => {
-
       fs.appendFile(config.logPath, sessionText, (error) => {
         if (error) {console.log(`Log Error: ${error}`);}
       });
@@ -129,8 +109,6 @@ let pushConfig = async (config) => {
       else {
         retryPrompt(config);
       }
-
-
     },
     SSH.connect(callback);
   }
