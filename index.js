@@ -2,8 +2,8 @@
 
 //import app modules
 const confirmPassword =         require('./app/confirm_password');
+const confirmUserPrompt =       require('./app/confirm_user_prompt');
 const formatHostname =          require('./app/format_hostname');
-const generateConfirmPrompt =   require('./app/generate_confirm_prompt');
 const getLogName =              require('./app/get_log_name');
 const getSetPassword =          require('./app/get_set_password');
 const increment =               require('./app/increment');
@@ -30,38 +30,6 @@ config.logPath = `${__dirname}/logs/${getLogName(config)}`;
 
 //display the welcome message to the user
 console.log(config.greeting);
-
-//prompt the user to confirm the current configuration
-let confirmUserPrompt = async () => {
-  if (config.continue) {
-    try {
-      const confirm = await prompts(generateConfirmPrompt(config));
-      let oobType = config.oobType;
-      let defaultPassword = config[oobType].defaultPassword;
-      config.currentPassword = (confirm.password) ? confirm.password : defaultPassword;
-      //exit the script if the user chooses not to push the current configuration
-      if (responseIs.negative(confirm.confirm)) {
-        config.continue = false;
-        console.log('Exiting script.');
-      }
-      //if the user chooses to push the current confiruation,
-      //make the ssh connection and push the settings
-      if (responseIs.positive(confirm.confirm)) {
-        try {
-          pushConfig(config);
-        }
-        catch(error) {
-          config.continue = false;
-          console.log(error);
-        }
-      }
-    }
-    catch(error) {
-      config.continue = false;
-      console.log(error);
-    }
-  }
-};
 
 //send the configuration setting commands via an ssh session
 let pushConfig = async (config) => {
@@ -120,7 +88,7 @@ let retryPrompt = async (config) => {
       startNextLoop(config);
     }
     if (responseIs.positive(retryResponse)) {
-      confirmUserPrompt();
+      confirmUserPrompt(config);
     }
   }
   catch(error) {
@@ -134,12 +102,12 @@ let startNextLoop = (config) => {
   config.currentHostname = increment(config.currentHostname);
   config.formattedHostname = formatHostname(config.currentHostname, config);
   config.currentIP = increment(config.currentIP);
-  confirmUserPrompt();
+  confirmUserPrompt(config);
 };
 
 //prompt the user for initial settings, then cofirm the current settings
 initialUserPrompt(config).then(
   () => { confirmPassword(config).then(
-    () => { confirmUserPrompt(); }
+    () => { confirmUserPrompt(config); }
   );}
 );
