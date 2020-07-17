@@ -1,7 +1,8 @@
 
 //import app modules
-const generateConfirmPrompt =   require('./generate_confirm_prompt');
-const responseIs =              require('./get_response_bool');
+const generateConfirmPrompt = require('./generate_confirm_prompt');
+const pushConfig =            require('./push_config');
+const responseIs =            require('./get_response_bool');
 
 //import external modules
 //module for prompting the user
