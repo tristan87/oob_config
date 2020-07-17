@@ -1,9 +1,9 @@
 // 2020 Tristan Davis | JPMC
 
 //import app modules
+const confirmPassword =         require('./app/confirm_password');
 const formatHostname =          require('./app/format_hostname');
 const generateConfirmPrompt =   require('./app/generate_confirm_prompt');
-const generatePWConfirmPrompt = require('./app/generate_pw_confirm_prompt');
 const getLogName =              require('./app/get_log_name');
 const getSetPassword =          require('./app/get_set_password');
 const increment =               require('./app/increment');
@@ -30,20 +30,6 @@ config.logPath = `${__dirname}/logs/${getLogName(config)}`;
 
 //display the welcome message to the user
 console.log(config.greeting);
-
-//prompt the user to confirm the password they entered
-let confirmPassword = async() => {
-  if (config.continue) {
-    try {
-      const confirmPrompt = generatePWConfirmPrompt(config, override);
-      const confirmPasswordResponse = await prompts(confirmPrompt);
-    }
-    catch(error) {
-      config.continue = false;
-      console.log(error);
-    }
-  }
-};
 
 //prompt the user to confirm the current configuration
 let confirmUserPrompt = async () => {
@@ -153,7 +139,7 @@ let startNextLoop = (config) => {
 
 //prompt the user for initial settings, then cofirm the current settings
 initialUserPrompt(config).then(
-  () => { confirmPassword().then(
+  () => { confirmPassword(config).then(
     () => { confirmUserPrompt(); }
   );}
 );
