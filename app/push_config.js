@@ -2,6 +2,8 @@
 const getConfigObject =   require('./get_config_object');
 const getHostObject =     require('./get_host_object');
 const parseSessionText =  require('./parse_session_text');
+const retryPrompt =       require('./retry_prompt');
+const startNextLoop =     require('./start_next_loop');
 //import external modules
 //module for creating log files
 const fs =        require('graceful-fs');
