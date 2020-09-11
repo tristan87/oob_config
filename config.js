@@ -18,13 +18,13 @@ module.exports = {
   continue: true,
 
     iDRAC: {
-      modulePath: './app/idrac',
+      modulePath: './idrac',
       defaultIP: '169.254.0.3',
       defaultUsername: 'root',
       defaultPassword: 'calvin'
     },
     iLO: {
-      modulePath: './app/ilo',
+      modulePath: './ilo',
       defaultIP: '169.254.1.2',
       defaultUsername: 'Administrator',
       defaultPassword: false
