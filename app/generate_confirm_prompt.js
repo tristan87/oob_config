@@ -3,9 +3,12 @@ const generateConfirmation = require('./generate_confirm_string');
 
 //generate user prompt(s) to confirm the current configuration
 module.exports = (config) => {
+  let oobType = config.oobType;
+  let defaultPassword = config[oobType].defaultPassword;
+
   return [
     {
-      type:     (config.oobType === 'iLO' && config.continue) ? 'text' : false,
+      type:     (oobType === 'iLO' && !defaultPassword && config.continue) ? 'text' : false,
       name:     'password',
       message:  () => `Please scan the iLO password for ${config.formattedHostname}: `,
       style:    'password',

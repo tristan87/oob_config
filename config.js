@@ -26,6 +26,7 @@ module.exports = {
     iLO: {
       modulePath: './app/ilo',
       defaultIP: '169.254.1.2',
-      defaultUsername: 'Administrator'
+      defaultUsername: 'Administrator',
+      defaultPassword: false
     },
 };
