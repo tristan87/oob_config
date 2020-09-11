@@ -28,7 +28,7 @@ module.exports = (config, configObject, sessionText) => {
 //return the appropriate object based on the success or failure status
     if (totalSuccess)   return totalSuccessObj;
     if (partialSuccess) return partialSuccessObj;
-    if (totalFailure)   return totalFailureObj;
+    else                return totalFailureObj;
   }
   else {
     return totalFailureObj;
