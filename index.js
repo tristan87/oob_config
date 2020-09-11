@@ -21,7 +21,6 @@ const prompts =   require('prompts');
 //module for ssh functionality
 const ssh2shell = require('ssh2shell');
 
-
 //import the configuration settings
 let config = require(override.configPath);
 
